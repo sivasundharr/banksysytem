@@ -1,0 +1,54 @@
+<h1>Transfer Money to Anyone at Anytime</h1>
+<ul class="list-group list-group-flush mt-3" style="box-shadow: 5px 10px 18px #888888;font-size: large;background-color: white;">
+    <!--
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong></strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+   -->
+    <% users.forEach((user) => { %>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <i class="fas fa-user-circle"> <%=user.firstName%> <%=user.lastName%>
+            </i>
+
+            <button class="btn btn-success"  data-toggle="collapse" data-target="#collapseExample<%=user.firstName%>" aria-expanded="false" aria-controls="collapseExample">
+                <i class="fas fa-money-check"></i>
+            </button>
+            
+        </li>
+        <div class="collapse" id="collapseExample<%=user.firstName%>" >
+            <div class="card card-body">
+                <form method="POST" action="/payment/<%=user._id%>">
+                    <input type="hidden" name="_method" value="PUT">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="senderName">Sender</label>
+                            <input type="text" class="form-control" id="senderName" name="sender" readonly value="<%=user.firstName%>">
+                          </div>
+                        <div class="form-group col-md-6">
+                          <label for="userInputEmail1">To</label>
+                          <input type="text" class="form-control" id="userInputEmail1" placeholder="Enter Receiver Name" name="receiver">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="exampleInputEmail1">Receiver Email</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Receiver email" name="receiveremail">
+                          </div>
+                        <div class="form-group col-md-6">
+                            <label for="amountInput">Amount</label>
+                            <input type="text" class="form-control" id="amountInput" name="receivedamount"/>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100" style="font-size: 1.2rem;">
+                        Send Money <i class="fas fa-credit-card"></i>
+                    </button>
+                </form>
+            </div>
+          </div>
+   <% }); %>
+</ul>

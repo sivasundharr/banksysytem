@@ -1,0 +1,21 @@
+<h1>Customers</h1>
+<table class="table mt-3" style="box-shadow: 5px 10px 18px #888888;background-color: white;">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Balance</th>
+      </tr>
+    </thead>
+    <tbody>
+        <% users.forEach((quiz) => { %>
+            <tr>
+                
+                <td><%=quiz.firstName %> <%=quiz.lastName %></td>
+               <td><%=quiz.email%></td>
+               <td><%=quiz.currentBalance%></td>
+            </tr>
+           
+        <% }); %>
+    </tbody>
+</table>
