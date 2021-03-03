@@ -1,4 +1,7 @@
 *{
+	margin :0;
+	border:0;
+	padding: 0;
 	box-sizing: border-box;
 }
 body {
@@ -16,14 +19,11 @@ ul {
   list-style: none;
 }
 
-tr{
-}
 
 th,td{
 	font-size: large;
 	font-weight: 500;
 }
-
 h2,
 h3,
 a {
@@ -74,14 +74,38 @@ li a:hover,h1 a:hover{
 .header {
 	padding-top: .5em;
 	padding-bottom: .5em;
-	/*border: 1px solid #a2a2a2;
-	background-color: #f4f4f4;*/
-	/*-webkit-box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.75);
-	-moz-box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.75);
-	box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.75);*/
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
+}
+footer{
+	position: fixed;
+	left:0;
+	bottom: 0;
+	background: linear-gradient(to right, #30CFD0 0%, #330867 100%);
+	color: white;
+	text-align: center;
+	width:100%;
+	font-size: 1.2rem;
+	padding:7px 0;
+}
+.bg-blue-grad{
+	background: linear-gradient(to right, #30CFD0 0%, #330867 100%);
+}
+
+.card-styles{
+	font-weight: bold;padding:20px;box-shadow: 5px 10px 18px #888888;
+	font-size: 1.1rem;
+}
+
+.fas.fa-user-circle{
+	font-size:1.2rem;
+}
+.card-name{
+	color: white;cursor: pointer;
+}
+.card-name:hover{
+	text-decoration: none;
 }
 
 

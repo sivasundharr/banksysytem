@@ -1,0 +1,25 @@
+<% if(transactions.length > 0){ %>
+<table class="table bg-primary text-white">
+    <thead>
+        <tr>
+            <th scope="col">Sender</th>
+            <th scope="col">Receiver</th>
+            <th scope="col">Transaction(Rs)</th>
+            <th scope="col">TransactionTime</th>
+        </tr>
+    </thead>
+   <tbody>
+       <% transactions.forEach((transaction)=> { %>
+        <tr scope="row">
+            <td><%= transaction.senderName %></td>
+            <td><%= transaction.receiverName %></td>
+            <td><%= transaction.transferAmount %></td>
+            <td><%= formatDate(transaction.createdAt,'MMMM Do YYYY,h:mm:ss a')%></td>
+        </tr>
+       <% }); %>
+       
+   </tbody>
+</table>
+<%} else{%>
+    <b>No Transitions done</b>
+<% } %>

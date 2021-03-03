@@ -1,14 +1,15 @@
 const router = require("express").Router();
 const User = require('../models/User');
+const Transaction = require('../models/Transaction');
+const { formatDate } = require('../helpers/hbs');
 
 router.get('/',(req,res)=>{
     res.render('home');
 });
-router.get('/create',(req,res)=>{
-    console.log("create page");
-})
+
+
 router.post('/create',async(req,res)=>{
-   const { firstName,lastName,email,age,address } = req.body;
+   const { firstName,lastName,email,age,address,currentBalance } = req.body;
 
     
     try{
@@ -18,7 +19,8 @@ router.post('/create',async(req,res)=>{
             lastName,
             email,
             age,
-            address
+            address,
+            currentBalance
         });
         await newUser.save();
         console.log("User created");
@@ -27,14 +29,12 @@ router.post('/create',async(req,res)=>{
     catch(err){
         console.log(err);
     }
-    //console.log(req.body);
 });
 
 router.get('/allusers',async(req,res)=>{
     try{
         const users = await User.find();
         res.render('allusers',{users});
-        //res.status(200).send(users);
     }
     catch(err){
         console.log(err);
@@ -43,51 +43,86 @@ router.get('/allusers',async(req,res)=>{
 
 });
 
-router.get('/transfer',async(req,res)=>{
-    const users = await User.find();
-    res.render('transfer',{users});
+router.get('/user/:id',async(req,res)=>{
+    try{
+        const customer = await User.findById(req.params.id);
+        res.render('profile',{customer});
+    }
+    catch(err){
+        console.log(err);
+        res.status(404).send({msg:"Invalid User"});
+    }
+
+});
+
+router.get('/transfer/:id',async(req,res)=>{
+    const uid = req.params.id;
+    const users = await User.find({
+        _id:{$ne:uid}
+    });
+
+    const customer = await User.findById(uid);
+
+    res.render('transfer',{users,customer});
 });
 
 router.put('/payment/:id',async(req,res)=>{
-    const { sender,receiveremail,receivedamount } = req.body;
+    const { senderUserName,senderId,receiveremail,receivedamount,receiver } = req.body;
     
-
     try{
         const user1 = await User.findById(req.params.id);
         const user2 = await User.findOne({email:receiveremail});
 
-        if(user1.currentBalance >= receivedamount && user1.currentBalance >=0 ){
+        if(user2.firstName === receiver && user2.email === receiveremail){
+            if(user1.currentBalance >= receivedamount && user1.currentBalance >=0 ){
+                const newTransaction =new  Transaction({
+                    senderName : senderUserName,
+                    receiverName : receiver,
+                    receiverEmail : receiveremail,
+                    transferAmount : receivedamount,
+                    sender : senderId
+                });
 
-            const sendername = await User.findOneAndUpdate(
-                {_id:req.params.id},
-                {currentBalance:user1.currentBalance-parseInt(receivedamount)},
-                {new:true}
-                );
-            //console.log(sendername);
+                await newTransaction.save();
 
-            const reciver = await User.findOneAndUpdate(
-                {email:receiveremail},
-                {currentBalance:user2.currentBalance + parseInt(receivedamount)},
-                {new:true}
-                );
-           
-           // console.log(reciver);
-            //console.log(user2.currentBalance);
-            res.redirect('/allusers');
+                const sendername = await User.findOneAndUpdate(
+                    {_id:req.params.id},
+                    {currentBalance:user1.currentBalance-parseInt(receivedamount)},
+                    {new:true}
+                    );
+
+                const reciver = await User.findOneAndUpdate(
+                    {email:receiveremail},
+                    {currentBalance:user2.currentBalance + parseInt(receivedamount)},
+                    {new:true}
+                    );
+            
+                res.redirect('/allusers');
+            }
+            else{
+                res.status(400).send({msg:"CurrentBalance is low then you enteered"});
+            }
         }
         else{
-            res.send({msg:"CurrentBalance is low then you enteered"});
+            res.status(400).send({msg:"No User founded this firstName or email address"});
         }
         }
     catch(err){
         console.log(err);
     }
     
-    //res.redirect('/processpayment',{details});
 });
 
-//router.put('/processpayment',async(req,res)=>{
-    
-//});
+router.get('/transactions/:id',async(req,res)=>{
+    try{
+        const transactions = await Transaction.find({sender:req.params.id});
+        res.render('transactions',{transactions,formatDate});
+    }
+    catch(err){
+        console.log(err);
+        res.status(400).send({msg:"something went wrong"})
+    }
+});
+
 
 module.exports = router;

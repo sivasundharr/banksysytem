@@ -1,0 +1,19 @@
+<div class="card">
+    <div class="card-body bg-primary" style="font-size: 1.1rem;color:white;">
+
+        <div>Full Name : <%=customer.firstName%><%=customer.lastName%></div>
+
+        <div>Email Adddress : <%=customer.email%></div>
+
+        <div>Balance : <%=customer.currentBalance%></div>
+
+        <div>Age : <%=customer.age%></div>
+
+        <div>Address : <%=customer.address%></div>
+        <div>
+            <i class="fas fa-sign-in-alt"> <a href="/transfer/<%=customer._id%>" style="color: dodgerblue;" class="card-name">Transfer Money</a></i>
+            <i class="fas fa-user-friends" style="float: right;"> <a href="/transactions/<%=customer._id%>" style="color: dodgerblue;" class="card-name">View Transactions</a></i> 
+        </div>
+        
+    </div>
+</div>
